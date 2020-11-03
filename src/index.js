@@ -8,6 +8,7 @@ import {
 import './index.css';
 import App from './App';
 import New from './new'
+import Product from './product'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
@@ -23,6 +24,9 @@ ReactDOM.render(
         </Route>
         <Route path="/products/new" exact>
           <New />
+        </Route>
+        <Route path="/products/:id/edit" exact>
+          <Product />
         </Route>
       </Switch>
     </div>

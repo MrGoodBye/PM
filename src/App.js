@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
-import { Table, Checkbox } from 'antd'
+import { Table, Checkbox, Row, Col, Button } from 'antd'
+import { Link } from 'react-router-dom'
 import { fetchProducts, updateProducts } from './service'
 import './App.css';
 
@@ -44,6 +45,21 @@ function App() {
                 checked={!!active}
                 onChange={e => onActiveChange(index, e.target.checked)}
               />
+            )
+          }, {
+            title: 'Actions',
+            dataIndex: 'action',
+            align: 'left',
+            render: (text, product) => (
+              <Row>
+                <Col span={8}><Button size='small'>View</Button></Col>
+                <Col span={8}>
+                  <Link to={`products/${product.id}/edit`}>
+                    <Button size='small' type='primary'>Edit</Button>
+                  </Link>
+                </Col>
+                <Col span={8}><Button size='small' danger>Delete</Button></Col>
+              </Row>
             )
           }
         ]}
