@@ -1,23 +1,42 @@
-import logo from './logo.svg';
+import { Table, Checkbox } from 'antd'
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Table
+        rowKey='id'
+        pagination={false}
+        dataSource={[
+          {
+            id: 1,
+            name: 'Book1',
+            type: 'Book',
+            quantity: 0,
+            price: '12.98',
+            active: true
+          }
+        ]}
+        columns={[
+          {
+            title: 'Name',
+            dataIndex: 'name'
+          }, {
+            title: 'Type',
+            dataIndex: 'type'
+          }, {
+            title: 'Quantity',
+            dataIndex: 'quantity'
+          }, {
+            title: 'Price',
+            dataIndex: 'price'
+          }, {
+            title: 'Active',
+            dataIndex: 'active',
+            render: active => <Checkbox checked={!!active} />
+          }
+        ]}
+      />
     </div>
   );
 }
