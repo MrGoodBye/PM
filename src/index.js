@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import './index.css';
 import App from './App';
-import New from './new'
 import Product from './product'
 import reportWebVitals from './reportWebVitals';
 
@@ -23,7 +22,10 @@ ReactDOM.render(
           <App />
         </Route>
         <Route path="/products/new" exact>
-          <New />
+          <Product />
+        </Route>
+        <Route path="/products/:id" exact>
+          <Product />
         </Route>
         <Route path="/products/:id/edit" exact>
           <Product />

@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
-import { Table, Checkbox, Row, Col, Button } from 'antd'
+import { Table, Checkbox, Row, Col, Button, Popconfirm } from 'antd'
 import { Link } from 'react-router-dom'
-import { fetchProducts, updateProducts } from './service'
+import { fetchProducts, updateProducts, deleteProductById } from './service'
 import './App.css';
 
 function App() {
@@ -16,6 +16,11 @@ function App() {
     const newDataSource = dataSource.map((p, i) => index === i ? { ...p, active: value } : p)
     setDataSource(newDataSource)
     updateProducts(newDataSource)
+  }
+
+  const onDelete = id => {
+    const newProducts = deleteProductById(id)
+    setDataSource(newProducts)
   }
 
   return (
@@ -47,18 +52,34 @@ function App() {
               />
             )
           }, {
-            title: 'Actions',
+            title: <>
+              Actions&nbsp;&nbsp;&nbsp;
+              <Link to={`products/new`}>
+                <Button size='small'>Add</Button>
+              </Link>
+              </>, //
             dataIndex: 'action',
             align: 'left',
             render: (text, product) => (
               <Row>
-                <Col span={8}><Button size='small'>View</Button></Col>
+                <Col span={8}>
+                  <Link to={`products/${product.id}`}>
+                    <Button size='small'>View</Button>
+                  </Link>
+                </Col>
                 <Col span={8}>
                   <Link to={`products/${product.id}/edit`}>
                     <Button size='small' type='primary'>Edit</Button>
                   </Link>
                 </Col>
-                <Col span={8}><Button size='small' danger>Delete</Button></Col>
+                <Col span={8}>
+                <Popconfirm
+                  title="Are you sure delete this product?"
+                  onConfirm={() => onDelete(product.id)}
+                >
+                  <Button size='small' danger>Delete</Button>
+                </Popconfirm>
+                </Col>
               </Row>
             )
           }

@@ -1,16 +1,24 @@
 import { Form, Input, InputNumber, Button, Checkbox, message } from 'antd'
 import { useParams, useHistory } from 'react-router-dom'
-import { fetchProductById, updateProduct } from './service'
+import { v4 } from 'uuid'
+import { fetchProductById, updateProduct, createProduct } from './service'
 import './product.css'
 
 export default function Product () {
     const { id } = useParams()
     const product = fetchProductById(id)
     const history = useHistory()
+    const isEditMode = history.location.pathname.indexOf('edit') > -1
+    const isCreateMode = !id
+    const isViewMode = !isEditMode && !isCreateMode
 
     const onFinish = (value) => {
         message.success('Successful')
-        updateProduct({ ...product, ...value })
+        if (isCreateMode) {
+            createProduct({ id: v4, ...value })
+        } else {
+            updateProduct({ ...product, ...value })
+        }
         history.push('/products')
     }
 
@@ -37,7 +45,7 @@ export default function Product () {
                     }
                 ]}
             >
-                <Input />
+                <Input disabled={isViewMode} />
             </Form.Item>
             <Form.Item
                 label='Type'
@@ -48,7 +56,7 @@ export default function Product () {
                     }
                 ]}
             >
-                <Input />
+                <Input disabled={isViewMode} />
             </Form.Item>
             <Form.Item
                 label='Quantity'
@@ -59,7 +67,7 @@ export default function Product () {
                     }
                 ]}
             >
-                <InputNumber step={1} precision={0} />
+                <InputNumber step={1} precision={0} disabled={isViewMode} />
             </Form.Item>
             <Form.Item
                 label='Price'
@@ -70,20 +78,23 @@ export default function Product () {
                     }
                 ]}
             >
-                <InputNumber step={0.01} precision={2} />
+                <InputNumber step={0.01} precision={2} disabled={isViewMode} />
             </Form.Item>
             <Form.Item
                 label='Active'
                 name='active'
                 valuePropName="checked"
             >
-                <Checkbox />
+                <Checkbox disabled={isViewMode} />
             </Form.Item>
-            <Form.Item wrapperCol={{offset: 5}}>
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
-            </Form.Item>
+            {
+                !isViewMode &&
+                <Form.Item wrapperCol={{offset: 5}}>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
+                </Form.Item>
+            }
         </Form>
     )
 }

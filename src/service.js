@@ -1,13 +1,13 @@
 const defaultValue = [
     {
-        id: 1,
+        id: '1',
         name: 'Book1',
         type: 'Book',
         quantity: 0,
         price: '12.98',
         active: true
     }, {
-        id: 2,
+        id: '2',
         name: 'Car1',
         type: 'Car',
         quantity: 1,
@@ -29,7 +29,7 @@ export const fetchProducts = () => {
 
 export const fetchProductById = (id) => {
     const products = JSON.parse(localStorage.getItem('products'))
-    return products.find(p => p.id === +id)
+    return products.find(p => p.id === id)
 }
 
 export const updateProducts = (products) => {
@@ -40,4 +40,17 @@ export const updateProduct = (product) => {
     const products = JSON.parse(localStorage.getItem('products'))
     const newProducts = products.map(p => p.id === product.id ? product : p)
     localStorage.setItem('products', JSON.stringify(newProducts))
+}
+
+export const createProduct = (product) => {
+    const products = JSON.parse(localStorage.getItem('products'))
+    const newProducts = [...products, product]
+    localStorage.setItem('products', JSON.stringify(newProducts))
+}
+
+export const deleteProductById = (id) => {
+    const products = JSON.parse(localStorage.getItem('products'))
+    const newProducts = products.filter(p => p.id !== id)
+    localStorage.setItem('products', JSON.stringify(newProducts))
+    return newProducts
 }
