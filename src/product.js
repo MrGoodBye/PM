@@ -1,6 +1,7 @@
 import { Form, Input, InputNumber, Button, Checkbox, message } from 'antd'
 import { useParams, useHistory } from 'react-router-dom'
 import { v4 } from 'uuid'
+import { Line } from '@ant-design/charts'
 import { fetchProductById, updateProduct, createProduct } from './service'
 import './product.css'
 
@@ -15,9 +16,14 @@ export default function Product () {
     const onFinish = (value) => {
         message.success('Successful')
         if (isCreateMode) {
-            createProduct({ id: v4, ...value })
+            createProduct({ id: v4(), ...value })
         } else {
-            updateProduct({ ...product, ...value })
+            const newPrice = { lastModified: new Date(), value: value.price }
+            const prices = product.prices ? [...product.prices, newPrice] : [newPrice]
+            if (prices.length > 10) {
+                prices.shift()
+            }
+            updateProduct({ ...product, ...value, prices })
         }
         history.push('/products')
     }
@@ -67,7 +73,7 @@ export default function Product () {
                     }
                 ]}
             >
-                <InputNumber step={1} precision={0} disabled={isViewMode} />
+                <InputNumber step={1} precision={0} min={0} disabled={isViewMode} />
             </Form.Item>
             <Form.Item
                 label='Price'
@@ -88,8 +94,18 @@ export default function Product () {
                 <Checkbox disabled={isViewMode} />
             </Form.Item>
             {
-                !isViewMode &&
-                <Form.Item wrapperCol={{offset: 5}}>
+                isViewMode 
+                ? <Line
+                    data={product.prices || []}
+                    height={400}
+                    xField='lastModified'
+                    yField='value'
+                    point={{
+                        size: 5,
+                        shape: 'diamond',
+                    }}
+                />
+                : <Form.Item wrapperCol={{offset: 5}}>
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>
