@@ -95,7 +95,8 @@ export default function Product () {
             </Form.Item>
             {
                 isViewMode 
-                ? <Line
+                ? (
+                    product.prices && <Line
                     data={product.prices || []}
                     height={400}
                     xField='lastModified'
@@ -105,6 +106,7 @@ export default function Product () {
                         shape: 'diamond',
                     }}
                 />
+                )
                 : <Form.Item wrapperCol={{offset: 5}}>
                     <Button type="primary" htmlType="submit">
                         Submit

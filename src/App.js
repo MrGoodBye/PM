@@ -29,6 +29,7 @@ function App() {
         rowKey='id'
         pagination={false}
         dataSource={dataSource}
+        rowClassName={(p) => p.quantity ? '' : 'highlight'}
         columns={[
           {
             title: 'Name',
